@@ -1,19 +1,13 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
+import { Navigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 export default class Redirect extends Component {
-
   static propTypes = {
-    redirectPath: PropTypes.string.isRequired,
-    redirect: PropTypes.func.isRequired
+    redirectParams: PropTypes.object.isRequired,
   };
 
-  UNSAFE_componentWillMount() {
-    this.props.redirect(this.props, this.props.redirectPath)
-  }
-
   render() {
-    // Redirect should happen before this is rendered
-    return null
+    return <Navigate to={this.props.redirectParams} />
   }
 }

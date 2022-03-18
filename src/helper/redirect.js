@@ -3,6 +3,7 @@ import invariant from 'invariant'
 
 import authWrapper from '../authWrapper'
 import Redirect from '../redirect'
+import { withLocation } from '../withLocation'
 
 const connectedDefaults = {
   authenticatingSelector: () => false,
@@ -42,9 +43,12 @@ export default ({ locationHelperBuilder, getRouterRedirect }) => {
     const redirect = (replace) => (props, path) =>
       replace(createRedirectLoc(allowRedirectBackFn(props, path))(props, path))
 
-    const ConnectedFailureComponent = connect((state, ownProps) => ({
-      redirect: redirect(getRouterRedirect(ownProps))
-    }))(FailureComponent)
+    const ConnectedFailureComponent = withLocation(
+      connect((state, ownProps) => ({
+        redirect: redirect(getRouterRedirect(ownProps)),
+        redirectParams: createRedirectLoc(allowRedirectBackFn(ownProps, ownProps.redirectPath))(ownProps, ownProps.redirectPath)
+      }))(FailureComponent)
+    )
 
     return (DecoratedComponent) =>
       connect((state, ownProps) => ({
@@ -84,7 +88,11 @@ export default ({ locationHelperBuilder, getRouterRedirect }) => {
       redirect: (props, path) => dispatch(redirectAction(createRedirectLoc(allowRedirectBackFn(props, path))(props, path)))
     })
 
-    const ConnectedFailureComponent = connect(null, createRedirect)(FailureComponent)
+    const mapStateToProps = (_, ownProps) => ({
+      redirectParams: createRedirectLoc(allowRedirectBackFn(ownProps, ownProps.redirectPath))(ownProps, ownProps.redirectPath)
+    })
+
+    const ConnectedFailureComponent = withLocation(connect(mapStateToProps, createRedirect)(FailureComponent))
 
     return (DecoratedComponent) =>
       connect((state, ownProps) => ({
