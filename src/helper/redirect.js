@@ -60,7 +60,7 @@ export default ({ locationHelperBuilder, getRouterRedirect }) => {
 
   const connectedReduxRedirect = (args) => {
     const allArgs = { ...connectedDefaults, ...args }
-    const { FailureComponent, redirectPath, authenticatedSelector, authenticatingSelector, allowRedirectBack, redirectAction, redirectQueryParamName } = allArgs
+    const { FailureComponent, redirectPath, authenticatedSelector, authenticatingSelector, allowRedirectBack, redirectAction, redirectQueryParamName, loader } = allArgs
 
     const { createRedirectLoc } = locationHelperBuilder({
       redirectQueryParamName
@@ -89,7 +89,8 @@ export default ({ locationHelperBuilder, getRouterRedirect }) => {
     })
 
     const mapStateToProps = (_, ownProps) => ({
-      redirectParams: createRedirectLoc(allowRedirectBackFn(ownProps, ownProps.redirectPath))(ownProps, ownProps.redirectPath)
+      redirectParams: createRedirectLoc(allowRedirectBackFn(ownProps, ownProps.redirectPath))(ownProps, ownProps.redirectPath),
+      loader,
     })
 
     const ConnectedFailureComponent = withLocation(connect(mapStateToProps, createRedirect)(FailureComponent))
