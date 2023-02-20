@@ -1,13 +1,20 @@
-import React, { Component } from 'react'
-import { Navigate } from 'react-router-dom'
-import PropTypes from 'prop-types'
+import React, { useEffect, useRef } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 
-export default class Redirect extends Component {
-  static propTypes = {
-    redirectParams: PropTypes.object.isRequired,
-  };
+const Redirect = ({ redirectParams }) => {
+  const ref = useRef(true);
 
-  render() {
-    return <Navigate to={this.props.redirectParams} />
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    ref.current = false;
+  }, [pathname]);
+
+  if (ref.current) {
+    return <Navigate to={redirectParams} />;
   }
-}
+
+  return null;
+};
+
+export default Redirect;
