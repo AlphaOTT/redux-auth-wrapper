@@ -22,23 +22,23 @@ export default (args) => {
     const location = locationSelector(props)
     const redirectLoc = url.parse(redirectPath, true)
 
-    let query
-
-    if (allowRedirectBack) {
-      query = { [redirectQueryParamName]: `${location.pathname}${location.search}${location.hash}` }
-    } else {
-      query = {}
-    }
-
-    query = {
-      ...query,
-      ...redirectLoc.query
-    }
+    // let query
+    //
+    // if (allowRedirectBack) {
+    //   query = { [redirectQueryParamName]: `${location.pathname}${location.search}${location.hash}` }
+    // } else {
+    //   query = {}
+    // }
+    //
+    // query = {
+    //   ...query,
+    //   ...redirectLoc.query
+    // }
 
     return {
       pathname: redirectLoc.pathname,
       hash: redirectLoc.hash,
-      search: stringify(query)
+      search: location.search
     }
   }
 
