@@ -95,15 +95,15 @@ export default ({ locationHelperBuilder, getRouterRedirect }) => {
     const ConnectedFailureComponent = withLocation(connect(mapStateToProps, createRedirect)(FailureComponent))
 
     return (DecoratedComponent) =>
-      connect((state, ownProps) => ({
+      withLocation(connect((state, ownProps) => ({
         redirectPath: redirectPathSelector(state, ownProps),
         isAuthenticated: authenticatedSelector(state, ownProps),
         isAuthenticating: authenticatingSelector(state, ownProps)
-      }))(authWrapper({ ...allArgs, FailureComponent: ConnectedFailureComponent })(DecoratedComponent))
+      }))(authWrapper({ ...allArgs, FailureComponent: ConnectedFailureComponent })(DecoratedComponent)))
   }
 
   return {
     connectedRouterRedirect,
-    connectedReduxRedirect
+    connectedReduxRedirect,
   }
 }

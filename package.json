@@ -62,7 +62,8 @@
     "hoist-non-react-statics": "^3.3.0",
     "invariant": "^2.2.4",
     "lodash.isempty": "^4.4.0",
-    "query-string": "^6.9.0",
+    "query-string": "8.2.0",
+    "ramda": "^0.29.1",
     "url": "^0.11.0"
   }
 }

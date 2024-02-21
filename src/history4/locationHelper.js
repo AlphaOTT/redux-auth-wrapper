@@ -1,5 +1,6 @@
 import url from 'url'
-import { stringify, parse } from 'query-string'
+import queryString from 'query-string'
+import { dissoc } from 'ramda'
 
 const defaults = {
   redirectQueryParamName: 'redirect',
@@ -14,7 +15,7 @@ export default (args) => {
 
   const getRedirectQueryParam = (props) => {
     const location = locationSelector(props)
-    const query = parse(location.search)
+    const query = queryString.parse(location.search)
     return query[redirectQueryParamName]
   }
 
@@ -22,23 +23,24 @@ export default (args) => {
     const location = locationSelector(props)
     const redirectLoc = url.parse(redirectPath, true)
 
-    // let query
-    //
-    // if (allowRedirectBack) {
-    //   query = { [redirectQueryParamName]: `${location.pathname}${location.search}${location.hash}` }
-    // } else {
-    //   query = {}
-    // }
-    //
-    // query = {
-    //   ...query,
-    //   ...redirectLoc.query
-    // }
+    let query
+
+    if (allowRedirectBack) {
+      query = { [redirectQueryParamName]: `${location.pathname}${location.search}${location.hash}` }
+    } else {
+      query = {}
+    }
+
+    query = {
+      ...query,
+      ...redirectLoc.query,
+      ...dissoc('redirect', queryString.parse(location.search))
+    }
 
     return {
       pathname: redirectLoc.pathname,
       hash: redirectLoc.hash,
-      search: location.search
+      search: queryString.stringify(query)
     }
   }
 
